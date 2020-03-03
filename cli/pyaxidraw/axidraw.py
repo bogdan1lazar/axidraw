@@ -3197,11 +3197,11 @@ class AxiDraw(inkex.Effect):
         self.pen_lower()
         self._xy_plot_segment(True,x_delta, y_delta)
 
-    def penup(self,pin=0):
+    def penup(self,pin=1):
         # For interactive-mode use as an imported python module
         self.pen_raise(pin)
 
-    def pendown(self,pin=0):
+    def pendown(self,pin=1):
         # For interactive-mode use as an imported python module
         self.pen_lower(pin)
 
