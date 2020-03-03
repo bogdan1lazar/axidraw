@@ -208,15 +208,15 @@ def sendEnableMotors(port_name, res):
         # If res == 5, -> No microstepping
 
 
-def sendPenDown(port_name, pen_delay):
+def sendPenDown(port_name, pen_delay, pen_pin=1):
     if port_name is not None:
-        str_output = 'SP,0,{0}\r'.format(pen_delay)
+        str_output = 'SP,0,{0},{1}\r'.format(pen_delay,pen_pin)
         ebb_serial.command(port_name, str_output)
 
 
-def sendPenUp(port_name, pen_delay):
+def sendPenUp(port_name, pen_delay, pen_pin=1):
     if port_name is not None:
-        str_output = 'SP,1,{0}\r'.format(pen_delay)
+        str_output = 'SP,1,{0},{1}\r'.format(pen_delay,pen_pin)
         ebb_serial.command(port_name, str_output)
 
 

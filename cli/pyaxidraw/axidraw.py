@@ -2843,7 +2843,7 @@ class AxiDraw(inkex.Effect):
 
         # ebb_motion.PBOutConfig( self.serial_port, 3, 0 )    # Configure I/O Pin B3 as an output, low
 
-    def pen_raise(self):
+    def pen_raise(self, pin=1):
         self.virtual_pen_up = True  # Virtual pen keeps track of state for resuming plotting.
         if not self.resume_mode and not self.pen_up:  # skip if pen is already up, or if we're resuming.
             if self.use_custom_layer_pen_height:
@@ -2864,7 +2864,7 @@ class AxiDraw(inkex.Effect):
                 self.updateVCharts(0, 0, 0)
                 self.pt_estimate += v_time
             else:
-                ebb_motion.sendPenUp(self.serial_port, v_time)
+                ebb_motion.sendPenUp(self.serial_port, v_time, pin)
                 # ebb_motion.PBOutValue( self.serial_port, 3, 0 )    # I/O Pin B3 output: low
                 if v_time > 50:
                     if self.options.mode != "manual":
@@ -2872,7 +2872,7 @@ class AxiDraw(inkex.Effect):
             self.pen_up = True
         self.path_data_pen_up = -1
 
-    def pen_lower(self):
+    def pen_lower(self, pin=1):
         self.virtual_pen_up = False  # Virtual pen keeps track of state for resuming plotting.
         if self.pen_up or self.pen_up is None:  # skip if pen is already down
             if not self.resume_mode and not self.b_stopped:  # skip if resuming or stopped
@@ -2893,7 +2893,7 @@ class AxiDraw(inkex.Effect):
                     self.updateVCharts(0, 0, 0)
                     self.pt_estimate += v_time
                 else:
-                    ebb_motion.sendPenDown(self.serial_port, v_time)
+                    ebb_motion.sendPenDown(self.serial_port, v_time, pin)
                     # ebb_motion.PBOutValue( self.serial_port, 3, 1 )    # I/O Pin B3 output: high
                     if v_time > 50:
                         if self.options.mode != "manual":
@@ -3197,13 +3197,13 @@ class AxiDraw(inkex.Effect):
         self.pen_lower()
         self._xy_plot_segment(True,x_delta, y_delta)
 
-    def penup(self):
+    def penup(self,pin=0):
         # For interactive-mode use as an imported python module
-        self.pen_raise()
+        self.pen_raise(pin)
 
-    def pendown(self):
+    def pendown(self,pin=0):
         # For interactive-mode use as an imported python module
-        self.pen_lower()
+        self.pen_lower(pin)
 
     def disconnect(self):
         # End session; disconnect from AxiDraw
